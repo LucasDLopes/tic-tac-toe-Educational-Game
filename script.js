@@ -15,16 +15,16 @@ var requestOptions = {
 let curPlayer='X';
 let board=['','','','','','','','',''];
 let questionList=[
-    {"question":"Example 1","options":["1","2","3","4"],"answer":1, "image":"","answerImage":[]},
-    {"question":"Example 2","options":["1","2","3","4"],"answer":3 ,"image":"","answerImage":[]},
-    {"question":"Example 3","options":["123","231","231","12"],"answer":4 ,"image":"","answerImage":[]},
+    {"question":"Sample Question 1","options":["1","2","3","4"],"answer":1, "image":"","answerImage":[]},
+    {"question":"When was the followind meme template first introduced?","options":["1","2","3","4"],"answer":3 ,"image":"","answerImage":[]},
+    {"question":"Select the best definition of PLANT below:","options":["A creature that breathes fire","A creature with legs","A creature that has eyes","Has leaves"],"answer":4 ,"image":"","answerImage":[]},
     {"question":"Example 4","options":["1233","231","313","123"],"answer":2 ,"image":"","answerImage":[]},
     {"question":"Example 5","options":["44","33","22","11"],"answer":3 ,"image":"","answerImage":[]},
-    {"question":"Example 6","options":["123","123","123","123"],"answer":1 ,"image":"","answerImage":[]},
-    {"question":"Example 7","options":["123","123","123","123"],"answer":2 ,"image":"","answerImage":[]},
-    {"question":"Example 8","options":["123","123","123","123"],"answer":3 ,"image":"","answerImage":[]},
-    {"question":"Example 9","options":["1415","13","123","123"],"answer":4 ,"image":"","answerImage":[]},
-    {"question":"Example 10","options":["1223","333","222","11"],"answer":3 ,"image":"","answerImage":[]}
+    {"question":"What is the meaning of life?","options":["123","123","123","123"],"answer":1 ,"image":"","answerImage":[]},
+    {"question":"If picked at random, what is the chance you will get this answer right?","options":["25%","25%","50%","75%"],"answer":2 ,"image":"","answerImage":[]},
+    {"question":"Yet another question","options":["123","123","123","123"],"answer":3 ,"image":"","answerImage":[]},
+    {"question":"What should follow this sequence? 0-1-1-2-3-5-8","options":["122","13","11","12"],"answer":4 ,"image":"","answerImage":[]},
+    {"question":"What is 3!?","options":["2","3","6","11"],"answer":3 ,"image":"","answerImage":[]}
 ];
 
 fetch( 'https://api.imgur.com/3/album/' + albumToken +'/images',{
@@ -69,7 +69,6 @@ let gameState="player move"; //"player move" "question" "steal" "game over"
 const modal = document.getElementById("questionModal");
 const questionSlot = document.getElementById("questionSlot");
 const imageSlot = document.getElementById("imageSlot");
-//var btn = document.getElementById("myBtn");
 var rb1 = document.getElementById("rb1");
 var rb2 = document.getElementById("rb2");
 var rb3 = document.getElementById("rb3");
@@ -80,16 +79,6 @@ var lb3 = document.getElementById("lb3");
 var lb4 = document.getElementById("lb4");
 const radioButtons = document.getElementsByName("radioButton");
 
-
-//var span = document.getElementsByClassName("close")[0];
-
-
-// When the user clicks anywhere outside of the modal, close it
-// window.onclick = function(event) {
-//   if (event.target == modal) {
-//     modal.style.display = "none";
-//   }
-// }
 
 function selectedCellEvent(event){
 let clickedCellIndex = parseInt(event.target.id.replace('cell-',''))-1;
@@ -114,7 +103,6 @@ function selectedOption(index){
             console.log("CORRECT, MARKING SLOT FOR PLAYER");
             board[selectedCell]=curPlayer;
             modal.style.display = "none";
-            changePlayer();
             updateBoardDisplay();
             
         }else{
@@ -138,7 +126,6 @@ function selectedOption(index){
             console.log("Opponent fails to steal");
         }
         modal.style.display = "none";
-        changePlayer();
         updateBoardDisplay();
     }
     
@@ -241,7 +228,9 @@ function announceWinner(player) {
     }
   
     if (roundWon) {
-        changePlayer();
+        if(gameState=='steal'){
+            changePlayer();
+        }
         announceWinner(curPlayer);
         gameState="game over";
         return;
@@ -253,6 +242,7 @@ function announceWinner(player) {
         gameState="game over";
         return;
     }
+    changePlayer();
   }
   
   function resetGame() {
