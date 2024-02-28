@@ -154,17 +154,15 @@ function updateBoardDisplay(){
  */
 function displayRandomQuestion(){
     //step 1: grab random question from question list
-    console.log("display question START");
     let ran= Math.floor(Math.random() * (questionList.length));
     //let ran=0;
     //console.log(ran);
     currentQuestion=questionList[ran];
     //console.log(currentQuestion);
-    //console.log(modal);
+
     //step 2: place question text into modal
     questionSlot.innerHTML=currentQuestion.question;
     imageSlot.src = currentQuestion.image;
-
     var imageAnswer = document.querySelectorAll('.answer-image');
     var index=0;
     imageAnswer.forEach(imageAnswerSlot => {
