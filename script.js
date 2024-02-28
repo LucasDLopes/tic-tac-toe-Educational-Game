@@ -15,16 +15,16 @@ var requestOptions = {
 let curPlayer='X';
 let board=['','','','','','','','',''];
 let questionList=[
-    {"question":"Example 1","options":["1","2","3","4"],"answer":1, "image":""},
-    {"question":"Example 2","options":["1","2","3","4"],"answer":3 ,"image":""},
-    {"question":"Example 3","options":["123","231","231","12"],"answer":4 ,"image":""},
-    {"question":"Example 4","options":["1233","231","313","123"],"answer":2 ,"image":""},
-    {"question":"Example 5","options":["44","33","22","11"],"answer":3 ,"image":""},
-    {"question":"Example 6","options":["123","123","123","123"],"answer":1 ,"image":""},
-    {"question":"Example 7","options":["123","123","123","123"],"answer":2 ,"image":""},
-    {"question":"Example 8","options":["123","123","123","123"],"answer":3 ,"image":""},
-    {"question":"Example 9","options":["1415","13","123","123"],"answer":4 ,"image":""},
-    {"question":"Example 10","options":["1223","333","222","11"],"answer":3 ,"image":""}
+    {"question":"Example 1","options":["1","2","3","4"],"answer":1, "image":"","answerImage":[]},
+    {"question":"Example 2","options":["1","2","3","4"],"answer":3 ,"image":"","answerImage":[]},
+    {"question":"Example 3","options":["123","231","231","12"],"answer":4 ,"image":"","answerImage":[]},
+    {"question":"Example 4","options":["1233","231","313","123"],"answer":2 ,"image":"","answerImage":[]},
+    {"question":"Example 5","options":["44","33","22","11"],"answer":3 ,"image":"","answerImage":[]},
+    {"question":"Example 6","options":["123","123","123","123"],"answer":1 ,"image":"","answerImage":[]},
+    {"question":"Example 7","options":["123","123","123","123"],"answer":2 ,"image":"","answerImage":[]},
+    {"question":"Example 8","options":["123","123","123","123"],"answer":3 ,"image":"","answerImage":[]},
+    {"question":"Example 9","options":["1415","13","123","123"],"answer":4 ,"image":"","answerImage":[]},
+    {"question":"Example 10","options":["1223","333","222","11"],"answer":3 ,"image":"","answerImage":[]}
 ];
 
 fetch( 'https://api.imgur.com/3/album/' + albumToken +'/images',{
@@ -39,10 +39,20 @@ fetch( 'https://api.imgur.com/3/album/' + albumToken +'/images',{
     imgurResponse=result;
     let i =0;
     imgurResponse.data.forEach(img=>{
-        if(i<questionList.length){
-            questionList[i].image=img.link
-            i++;
+        if(img.description.includes('-')){
+            console.log("found an answer image!");
+            var questionIndex= img.description.substring(0, img.description.indexOf("-"))-1;
+            var answerIndex =img.description.slice(img.description.indexOf("-")+1)-1;
+            questionList[questionIndex].answerImage[answerIndex]=img.link;
+        }else{
+            console.log("found a Question image");
+            var x = Number(img.description)-1;
+            questionList[x].image=img.link;
         }
+        // if(i<questionList.length){
+        //     questionList[i].image=img.link
+        //     i++;
+        // }
     });
 })
   .catch(error => console.log('error', error));
@@ -153,6 +163,7 @@ function displayRandomQuestion(){
     //step 1: grab random question from question list
     console.log("display question START");
     let ran= Math.floor(Math.random() * (questionList.length));
+    //let ran=0;
     console.log(ran);
     currentQuestion=questionList[ran];
     console.log(currentQuestion);
@@ -160,6 +171,18 @@ function displayRandomQuestion(){
     //step 2: place question text into modal
     questionSlot.innerHTML=currentQuestion.question;
     imageSlot.src = currentQuestion.image;
+
+    var imageAnswer = document.querySelectorAll('.answer-image');
+    var index=0;
+    imageAnswer.forEach(imageAnswerSlot => {
+        if(currentQuestion.answerImage[index]){
+            imageAnswerSlot.src=currentQuestion.answerImage[index];
+            imageAnswerSlot.style.display = "block";
+        }else{
+            imageAnswerSlot.style.display = "none";
+        }
+        index++;
+    });
 
 
     //step 3: populate radio buttons
