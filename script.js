@@ -1,17 +1,53 @@
+const clientId="013679e73555b52";
+const clientSecret = "dc8782724fd6355c6867b018bddd200122af5073";
+const refreshToken="bae8624bebbb8a645bbe57340cb262e1a1f3f972";
+const albumToken ="OnQLObe";
+var imgurResponse;
+
+var myHeaders = new Headers();
+myHeaders.append("Authorization", "Client-ID {{clientId}}");
+
+var requestOptions = {
+  method: 'GET',
+  headers: myHeaders,
+};
+
 let curPlayer='X';
 let board=['','','','','','','','',''];
 let questionList=[
-    {"question":"Example 1","options":["1","2","3","4"],"answer":1},
-    {"question":"Example 2","options":["1","2","3","4"],"answer":3},
-    {"question":"Example 3","options":["123","231","231","12"],"answer":4},
-    {"question":"Example 4","options":["1233","231","313","123"],"answer":2},
-    {"question":"Example 5","options":["44","33","22","11"],"answer":3},
-    {"question":"Example 6","options":["123","123","123","123"],"answer":1},
-    {"question":"Example 7","options":["123","123","123","123"],"answer":2},
-    {"question":"Example 8","options":["123","123","123","123"],"answer":3},
-    {"question":"Example 9","options":["1415","13","123","123"],"answer":4},
-    {"question":"Example 10","options":["1223","333","222","11"],"answer":3}
+    {"question":"Example 1","options":["1","2","3","4"],"answer":1, "image":""},
+    {"question":"Example 2","options":["1","2","3","4"],"answer":3 ,"image":""},
+    {"question":"Example 3","options":["123","231","231","12"],"answer":4 ,"image":""},
+    {"question":"Example 4","options":["1233","231","313","123"],"answer":2 ,"image":""},
+    {"question":"Example 5","options":["44","33","22","11"],"answer":3 ,"image":""},
+    {"question":"Example 6","options":["123","123","123","123"],"answer":1 ,"image":""},
+    {"question":"Example 7","options":["123","123","123","123"],"answer":2 ,"image":""},
+    {"question":"Example 8","options":["123","123","123","123"],"answer":3 ,"image":""},
+    {"question":"Example 9","options":["1415","13","123","123"],"answer":4 ,"image":""},
+    {"question":"Example 10","options":["1223","333","222","11"],"answer":3 ,"image":""}
 ];
+
+fetch( 'https://api.imgur.com/3/album/' + albumToken +'/images',{
+    method:"GET",
+    headers:{
+        'Authorization':'Client-ID '+clientId
+    }
+})
+.then(response => response.json())
+  .then(result => {
+    console.log(result);
+    imgurResponse=result;
+    let i =0;
+    imgurResponse.data.forEach(img=>{
+        if(i<questionList.length){
+            questionList[i].image=img.link
+            i++;
+        }
+    });
+})
+  .catch(error => console.log('error', error));
+
+
 const cells = document.querySelectorAll('.cell');
 cells.forEach(cell => {
     cell.addEventListener('click', selectedCellEvent, false);
@@ -22,6 +58,7 @@ let currentQuestion ={question:"",options:["","","",""],answer:0}
 let gameState="player move"; //"player move" "question" "steal" "game over"
 const modal = document.getElementById("questionModal");
 const questionSlot = document.getElementById("questionSlot");
+const imageSlot = document.getElementById("imageSlot");
 //var btn = document.getElementById("myBtn");
 var rb1 = document.getElementById("rb1");
 var rb2 = document.getElementById("rb2");
@@ -122,6 +159,8 @@ function displayRandomQuestion(){
     console.log(modal);
     //step 2: place question text into modal
     questionSlot.innerHTML=currentQuestion.question;
+    imageSlot.src = currentQuestion.image;
+
 
     //step 3: populate radio buttons
     rb1.ariaValueText=currentQuestion.options[0];
