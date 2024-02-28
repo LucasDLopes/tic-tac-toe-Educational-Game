@@ -1,0 +1,62 @@
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Tic-Tac-Toe-Game</title>
+        <link rel="stylesheet" href="style.css">
+    </head>
+    <body>
+        <div id="game-board">
+            <div class="row">
+                <div class="cell"  id="cell-1"></div>
+                <div class="cell"  id="cell-2"></div>
+                <div class="cell"  id="cell-3"></div>
+            </div>
+            <div class="row">
+                <div class="cell" id="cell-4"></div>
+                <div class="cell"  id="cell-5"></div>
+                <div class="cell"  id="cell-6"></div>
+            </div>
+            <div class="row">
+                <div class="cell"  id="cell-7"></div>
+                <div class="cell"  id="cell-8"></div>
+                <div class="cell"  id="cell-9"></div>
+            </div>
+
+        </div>
+
+        <div id="gameMessage" class="game-message"></div>
+        <button id="resetButton">Reset Game</button>  
+
+
+        <div id="questionModal" class="modal">
+
+            <!-- Modal content -->
+            <div class="modal-content">
+              <!-- <span class="close">&times;</span> -->
+              <div id="questionSlot"></div>
+              <div>
+                <label id="lb1" class="question-label">Sample</label>
+                <input type="radio" id="rb1" onclick="selectedOption(1)" name="radioButton">
+              </div>
+              <div>
+                <label id="lb2"  class="question-label">Sample</label>
+                <input type="radio" id="rb2" onclick="selectedOption(2)" name="radioButton">
+              </div>
+              <div>
+                <label id="lb3"  class="question-label">Sample</label>
+                <input type="radio" id="rb3" onclick="selectedOption(3)" name="radioButton">
+              </div>
+              <div>
+                <label id="lb4"  class="question-label">Sample</label>
+                <input type="radio" id="rb4" onclick="selectedOption(4)" name="radioButton">
+              </div>
+               
+              <!-- <p>Some text in the Modal..</p> -->
+            </div>
+          
+          </div>
+
+          <script src="script.js"></script>
+    </body>
+</html>
